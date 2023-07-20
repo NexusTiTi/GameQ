@@ -1,5 +1,5 @@
 {
-  "name": "austinb/gameq",
+  "name": "nexustiti/gameq",
   "description": "GameQ Gameserver Library",
   "keywords": [
     "gameq",
@@ -54,7 +54,7 @@
     "wiki": "https://github.com/Austinb/GameQ/wiki"
   },
   "require": {
-    "php": ">=5.6.40",
+    "php": ">=8.0",
     "ext-bz2": "*",
     "ext-xml": "*"
   },
