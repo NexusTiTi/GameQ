@@ -42,6 +42,13 @@ class Rust extends Source
      * @type string
      */
     protected $name_long = "Rust";
+
+    /**
+     * query_port = client_port + 1
+     *
+     * @type int
+     */
+    protected $port_diff = 1;
     
     /**
      * Overload so we can get max players from mp of keywords and num players from cp keyword
