@@ -94,7 +94,7 @@ class Native extends Core
         // Create context
         $context = stream_context_create([
             'socket' => [
-                'bindto' => '0:0', // Bind to any available IP and OS decided port
+                'bindto' => '0.0.0.0:0', // Bind to any available IP and OS decided port
             ],
         ]);
 
