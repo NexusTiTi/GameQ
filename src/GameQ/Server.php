@@ -329,8 +329,10 @@ class Server
      */
     public function getJoinLink()
     {
-
-        return sprintf($this->protocol->joinLink(), $this->ip, $this->portClient());
+        if ($this->protocol->joinLink() !== null) {
+            return sprintf($this->protocol->joinLink(), $this->ip, $this->portClient());
+        }
+        return '';
     }
 
     /*
