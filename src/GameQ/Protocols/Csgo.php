@@ -26,18 +26,17 @@ namespace GameQ\Protocols;
  */
 class Csgo extends Source
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'csgo';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Counter-Strike: Global Offensive";
 }

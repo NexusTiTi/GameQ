@@ -25,32 +25,31 @@ namespace GameQ\Protocols;
  */
 class Serioussam extends Gamespy
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'serioussam';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Serious Sam";
 
     /**
      * query_port = client_port + 1
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 1;
 
     /**
      * Normalize settings for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General

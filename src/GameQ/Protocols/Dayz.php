@@ -26,18 +26,17 @@ namespace GameQ\Protocols;
  */
 class Dayz extends Source
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'dayz';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "DayZ Standalone";
 
@@ -50,7 +49,6 @@ class Dayz extends Source
      */
     public function findQueryPort($clientPort)
     {
-
         /*
          * Port layout:
          * 2302 - 27016

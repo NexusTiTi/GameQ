@@ -26,25 +26,24 @@ namespace GameQ\Protocols;
  */
 class Pixark extends Arkse
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'pixark';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "PixARK";
 
     /**
      * Query port = client_port + 1
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 1;
 }

@@ -25,11 +25,10 @@ namespace GameQ\Query;
  */
 abstract class Core
 {
-
     /**
      * The socket used by this resource
      *
-     * @type null|resource
+     * @var null|resource
      */
     public $socket = null;
 
@@ -37,35 +36,35 @@ abstract class Core
      * The transport type (udp, tcp, etc...)
      * See http://php.net/manual/en/transports.php for the supported list
      *
-     * @type string
+     * @var string
      */
     protected $transport = null;
 
     /**
      * Connection IP address
      *
-     * @type string
+     * @var string
      */
     protected $ip = null;
 
     /**
      * Connection port
      *
-     * @type int
+     * @var int
      */
     protected $port = null;
 
     /**
      * The time in seconds to wait before timing out while connecting to the socket
      *
-     * @type int
+     * @var int
      */
     protected $timeout = 3; // Seconds
 
     /**
      * Socket is blocking?
      *
-     * @type bool
+     * @var bool
      */
     protected $blocking = false;
 
@@ -74,7 +73,6 @@ abstract class Core
      */
     public function __clone()
     {
-
         // Reset the properties for this class when cloned
         $this->reset();
     }
@@ -90,7 +88,6 @@ abstract class Core
      */
     public function set($transport, $ip, $port, $timeout = 3, $blocking = false)
     {
-
         $this->transport = $transport;
 
         $this->ip = $ip;
@@ -107,7 +104,6 @@ abstract class Core
      */
     public function reset()
     {
-
         $this->transport = null;
 
         $this->ip = null;

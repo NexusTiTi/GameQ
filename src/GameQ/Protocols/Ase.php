@@ -18,8 +18,8 @@
 
 namespace GameQ\Protocols;
 
-use GameQ\Protocol;
 use GameQ\Buffer;
+use GameQ\Protocol;
 use GameQ\Result;
 
 /**
@@ -30,12 +30,11 @@ use GameQ\Result;
  */
 class Ase extends Protocol
 {
-
     /**
      * Array of packets we want to look up.
      * Each key should correspond to a defined method in this or a parent class
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         self::PACKET_ALL => "s",
@@ -44,35 +43,28 @@ class Ase extends Protocol
     /**
      * The query protocol used to make the call
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'ase';
 
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'ase';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "All-Seeing Eye";
 
     /**
-     * The client join link
-     *
-     * @type string
-     */
-    protected $join_link = null;
-
-    /**
      * Normalize settings for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General
@@ -147,19 +139,17 @@ class Ase extends Protocol
         return $result->fetch();
     }
 
-    /*
-     * Internal methods
-     */
+    // Internal methods
 
     /**
      * Handles processing the extra key/value pairs for server settings
      *
      * @param \GameQ\Buffer $buffer
      * @param \GameQ\Result $result
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processKeyValuePairs(Buffer &$buffer, Result &$result)
     {
-
         // Key / value pairs
         while ($buffer->getLength()) {
             $key = $buffer->readPascalString(1, true);
@@ -184,10 +174,10 @@ class Ase extends Protocol
      *
      * @param \GameQ\Buffer $buffer
      * @param \GameQ\Result $result
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processPlayersAndTeams(Buffer &$buffer, Result &$result)
     {
-
         // Players and team info
         while ($buffer->getLength()) {
             // Get the flags

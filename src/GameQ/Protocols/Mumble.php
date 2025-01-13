@@ -18,9 +18,9 @@
 
 namespace GameQ\Protocols;
 
+use GameQ\Exception\Protocol as Exception;
 use GameQ\Protocol;
 use GameQ\Result;
-use GameQ\Exception\Protocol as Exception;
 
 /**
  * Mumble Protocol class
@@ -32,12 +32,11 @@ use GameQ\Exception\Protocol as Exception;
  */
 class Mumble extends Protocol
 {
-
     /**
      * Array of packets we want to look up.
      * Each key should correspond to a defined method in this or a parent class
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         self::PACKET_ALL => "\x6A\x73\x6F\x6E", // JSON packet
@@ -46,49 +45,49 @@ class Mumble extends Protocol
     /**
      * The transport mode for this protocol is TCP
      *
-     * @type string
+     * @var string
      */
     protected $transport = self::TRANSPORT_TCP;
 
     /**
      * The query protocol used to make the call
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'mumble';
 
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'mumble';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Mumble Server";
 
     /**
      * The client join link
      *
-     * @type string
+     * @var string
      */
     protected $join_link = "mumble://%s:%d/";
 
     /**
      * 27800 = 64738 - 36938
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = -36938;
 
     /**
      * Normalize settings for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General
@@ -120,7 +119,6 @@ class Mumble extends Protocol
      */
     public function processResponse()
     {
-
         // Try to json_decode, make it into an array
         if (($data = json_decode(implode('', $this->packets_response), true)) === null) {
             throw new Exception(__METHOD__ . " Unable to decode JSON data.");
@@ -154,9 +152,7 @@ class Mumble extends Protocol
         return $result->fetch();
     }
 
-    /*
-     * Internal methods
-     */
+    // Internal methods
 
     /**
      * Handles processing the the channels and user info
@@ -166,7 +162,6 @@ class Mumble extends Protocol
      */
     protected function processChannelsAndUsers(array $data, Result &$result)
     {
-
         // Let's add all of the channel information
         foreach ($data as $key => $value) {
             // We will handle these later

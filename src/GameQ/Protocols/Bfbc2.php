@@ -18,10 +18,10 @@
 
 namespace GameQ\Protocols;
 
-use GameQ\Protocol;
 use GameQ\Buffer;
-use GameQ\Result;
 use GameQ\Exception\Protocol as Exception;
+use GameQ\Protocol;
+use GameQ\Result;
 
 /**
  * Battlefield Bad Company 2 Protocol Class
@@ -36,11 +36,10 @@ use GameQ\Exception\Protocol as Exception;
  */
 class Bfbc2 extends Protocol
 {
-
     /**
      * Array of packets we want to query.
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         self::PACKET_VERSION => "\x00\x00\x00\x00\x18\x00\x00\x00\x01\x00\x00\x00\x07\x00\x00\x00version\x00",
@@ -51,7 +50,7 @@ class Bfbc2 extends Protocol
     /**
      * Use the response flag to figure out what method to run
      *
-     * @type array
+     * @var array
      */
     protected $responses = [
         "processVersion",
@@ -62,50 +61,43 @@ class Bfbc2 extends Protocol
     /**
      * The transport mode for this protocol is TCP
      *
-     * @type string
+     * @var string
      */
     protected $transport = self::TRANSPORT_TCP;
 
     /**
      * The query protocol used to make the call
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'bfbc2';
 
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'bfbc2';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Battlefield Bad Company 2";
-
-    /**
-     * The client join link
-     *
-     * @type string
-     */
-    protected $join_link = null;
 
     /**
      * query_port = client_port + 29321
      * 48888 = 19567 + 29321
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 29321;
 
     /**
      * Normalize settings for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General
@@ -136,7 +128,6 @@ class Bfbc2 extends Protocol
      */
     public function processResponse()
     {
-
         //print_r($this->packets_response);
 
         // Holds the results sent back
@@ -172,9 +163,7 @@ class Bfbc2 extends Protocol
         return $results;
     }
 
-    /*
-     * Internal Methods
-     */
+    // Internal Methods
 
     /**
      * Decode the buffer into a usable format
@@ -182,10 +171,10 @@ class Bfbc2 extends Protocol
      * @param \GameQ\Buffer $buffer
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     protected function decode(Buffer $buffer)
     {
-
         $items = [];
 
         // Get the number of words in this buffer
@@ -209,10 +198,10 @@ class Bfbc2 extends Protocol
      * @param \GameQ\Buffer $buffer
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processDetails(Buffer $buffer)
     {
-
         // Decode into items
         $items = $this->decode($buffer);
 
@@ -272,6 +261,7 @@ class Bfbc2 extends Protocol
      * @param \GameQ\Buffer $buffer
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processVersion(Buffer $buffer)
     {
@@ -294,10 +284,10 @@ class Bfbc2 extends Protocol
      * @param \GameQ\Buffer $buffer
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processPlayers(Buffer $buffer)
     {
-
         // Decode into items
         $items = $this->decode($buffer);
 

@@ -18,27 +18,27 @@
 
 namespace GameQ\Protocols;
 
-use GameQ\Protocol;
 use GameQ\Buffer;
+use GameQ\Helpers\Str;
+use GameQ\Protocol;
 use GameQ\Result;
 
 /**
  * GameSpy3 Protocol class
  *
  * Given the ability for non utf-8 characters to be used as hostnames, player names, etc... this
- * version returns all strings utf-8 encoded (utf8_encode).  To access the proper version of a
- * string response you must use utf8_decode() on the specific response.
+ * version returns all strings utf-8 encoded.  To access the proper version of a
+ * string response you must use Str::utf8ToIso() on the specific response.
  *
  * @author Austin Bischoff <austin@codebeard.com>
  */
 class Gamespy3 extends Protocol
 {
-
     /**
      * Array of packets we want to look up.
      * Each key should correspond to a defined method in this or a parent class
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         self::PACKET_CHALLENGE => "\xFE\xFD\x09\x10\x20\x30\x40",
@@ -48,30 +48,23 @@ class Gamespy3 extends Protocol
     /**
      * The query protocol used to make the call
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'gamespy3';
 
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'gamespy3';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "GameSpy3 Server";
-
-    /**
-     * The client join link
-     *
-     * @type string
-     */
-    protected $join_link = null;
 
     /**
      * This defines the split between the server info and player/team info.
@@ -117,10 +110,10 @@ class Gamespy3 extends Protocol
      * Process the response
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     public function processResponse()
     {
-
         // Holds the processed packets
         $processed = [];
 
@@ -179,9 +172,7 @@ class Gamespy3 extends Protocol
         return $result->fetch();
     }
 
-    /*
-     * Internal methods
-     */
+    // Internal methods
 
     /**
      * Handles cleaning up packets since the responses can be a bit "dirty"
@@ -189,10 +180,10 @@ class Gamespy3 extends Protocol
      * @param array $packets
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     protected function cleanPackets(array $packets = [])
     {
-
         // Get the number of packets
         $packetCount = count($packets);
 
@@ -242,17 +233,18 @@ class Gamespy3 extends Protocol
      *
      * @param \GameQ\Buffer $buffer
      * @param \GameQ\Result $result
+     * @return void
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processDetails(Buffer &$buffer, Result &$result)
     {
-
         // We go until we hit an empty key
         while ($buffer->getLength()) {
             $key = $buffer->readString();
             if (strlen($key) == 0) {
                 break;
             }
-            $result->add($key, utf8_encode($buffer->readString()));
+            $result->add($key, Str::isoToUtf8($buffer->readString()));
         }
     }
 
@@ -264,7 +256,6 @@ class Gamespy3 extends Protocol
      */
     protected function processPlayersAndTeams(Buffer &$buffer, Result &$result)
     {
-
         /*
          * Explode the data into groups. First is player, next is team (item_t)
          * Each group should be as follows:
@@ -328,7 +319,7 @@ class Gamespy3 extends Protocol
                         break;
                     }
                     // Add the value to the proper item in the correct group
-                    $result->addSub($item_group, $item_type, utf8_encode(trim($val)));
+                    $result->addSub($item_group, $item_type, Str::isoToUtf8(trim($val)));
                 }
                 // Unset our buffer
                 unset($buf_temp);

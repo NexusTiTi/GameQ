@@ -41,17 +41,15 @@ use GameQ\Exception\Query as QueryException;
  */
 class GameQ
 {
-    /*
-     * Constants
-     */
+    // Constants
     const PROTOCOLS_DIRECTORY = __DIR__ . '/Protocols';
 
-    /* Static Section */
+    // Static Section
 
     /**
      * Holds the instance of itself
      *
-     * @type self
+     * @var self
      */
     protected static $instance = null;
 
@@ -62,7 +60,6 @@ class GameQ
      */
     public static function factory()
     {
-
         // Create a new instance
         self::$instance = new self();
 
@@ -70,12 +67,12 @@ class GameQ
         return self::$instance;
     }
 
-    /* Dynamic Section */
+    // Dynamic Section
 
     /**
      * Default options
      *
-     * @type array
+     * @var array
      */
     protected $options = [
         'debug'                => false,
@@ -99,37 +96,23 @@ class GameQ
     /**
      * Array of servers being queried
      *
-     * @type array
+     * @var array
      */
     protected $servers = [];
 
     /**
      * The query library to use.  Default is Native
      *
-     * @type string
+     * @var string
      */
     protected $queryLibrary = 'GameQ\\Query\\Native';
 
     /**
      * Holds the instance of the queryLibrary
      *
-     * @type \GameQ\Query\Core|null
+     * @var \GameQ\Query\Core|null
      */
     protected $query = null;
-
-    /**
-     * GameQ constructor.
-     *
-     * Do some checks as needed so this will operate
-     */
-    public function __construct()
-    {
-        // Check for missing utf8_encode function
-        if (!function_exists('utf8_encode')) {
-            throw new \Exception("PHP's utf8_encode() function is required - "
-                . "http://php.net/manual/en/function.utf8-encode.php.  Check your php installation.");
-        }
-    }
 
     /**
      * Get an option's value
@@ -140,7 +123,6 @@ class GameQ
      */
     public function __get($option)
     {
-
         return isset($this->options[$option]) ? $this->options[$option] : null;
     }
 
@@ -154,7 +136,6 @@ class GameQ
      */
     public function __set($option, $value)
     {
-
         $this->options[$option] = $value;
 
         return true;
@@ -180,7 +161,6 @@ class GameQ
      */
     public function setOption($var, $value)
     {
-
         // Use magic
         $this->{$var} = $value;
 
@@ -196,7 +176,6 @@ class GameQ
      */
     public function addServer(array $server_info = [])
     {
-
         // Add and validate the server
         $this->servers[uniqid()] = new Server($server_info);
 
@@ -212,7 +191,6 @@ class GameQ
      */
     public function addServers(array $servers = [])
     {
-
         // Loop through all the servers and add them
         foreach ($servers as $server_info) {
             $this->addServer($server_info);
@@ -233,7 +211,6 @@ class GameQ
      */
     public function addServersFromFiles($files = [])
     {
-
         // Since we expect an array let us turn a string (i.e. single file) into an array
         if (!is_array($files)) {
             $files = [$files];
@@ -268,7 +245,6 @@ class GameQ
      */
     public function clearServers()
     {
-
         // Reset all the servers
         $this->servers = [];
 
@@ -339,7 +315,6 @@ class GameQ
      */
     public function process()
     {
-
         // Initialize the query library we are using
         $class = new \ReflectionClass($this->queryLibrary);
 
@@ -361,7 +336,7 @@ class GameQ
 
         // Now we should have some information to process for each server
         foreach ($this->servers as $server) {
-            /* @var $server \GameQ\Server */
+            // @var $server \GameQ\Server
 
             // Parse the responses for this server
             $result = $this->doParseResponse($server);
@@ -384,7 +359,6 @@ class GameQ
      */
     protected function doChallenges()
     {
-
         // Initialize the sockets for reading
         $sockets = [];
 
@@ -393,7 +367,7 @@ class GameQ
 
         // Do challenge packets
         foreach ($this->servers as $server_id => $server) {
-            /* @var $server \GameQ\Server */
+            // @var $server \GameQ\Server
 
             // This protocol has a challenge packet that needs to be sent
             if ($server->protocol()->hasChallenge()) {
@@ -451,7 +425,7 @@ class GameQ
                 $challenge = new Buffer(implode('', $response));
 
                 // Grab the server instance
-                /* @var $server \GameQ\Server */
+                // @var $server \GameQ\Server
                 $server = $this->servers[$server_id];
 
                 // Apply the challenge
@@ -471,13 +445,12 @@ class GameQ
      */
     protected function doQueries()
     {
-
         // Initialize the array of sockets
         $sockets = [];
 
         // Iterate over the server list
         foreach ($this->servers as $server_id => $server) {
-            /* @var $server \GameQ\Server */
+            // @var $server \GameQ\Server
 
             // Invoke the beforeSend method
             $server->protocol()->beforeSend($server);
@@ -546,7 +519,7 @@ class GameQ
             $server_id = $sockets[$socket_id]['server_id'];
 
             // Grab the server instance
-            /* @var $server \GameQ\Server */
+            // @var $server \GameQ\Server
             $server = $this->servers[$server_id];
 
             // Save the response from this packet
@@ -557,7 +530,7 @@ class GameQ
 
         // Now we need to close all of the sockets
         foreach ($sockets as $socketInfo) {
-            /* @var $socket \GameQ\Query\Core */
+            // @var $socket \GameQ\Query\Core
             $socket = $socketInfo['socket'];
 
             // Close the socket
@@ -579,7 +552,6 @@ class GameQ
      */
     protected function doParseResponse(Server $server)
     {
-
         try {
             // @codeCoverageIgnoreStart
             // We want to save this server's response to a file (useful for unit testing)
@@ -635,7 +607,6 @@ class GameQ
      */
     protected function doApplyFilters(array $results, Server $server)
     {
-
         // Loop over the filters
         foreach ($this->options['filters'] as $filterOptions) {
             // Try to do this filter
