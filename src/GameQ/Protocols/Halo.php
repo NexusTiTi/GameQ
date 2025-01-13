@@ -25,18 +25,17 @@ namespace GameQ\Protocols;
  */
 class Halo extends Gamespy2
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'halo';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Halo: Combat Evolved";
 }

@@ -27,11 +27,10 @@ use GameQ\Server;
  */
 abstract class Base
 {
-
     /**
      * Holds the options for this instance of the filter
      *
-     * @type array
+     * @var array
      */
     protected $options = [];
 
@@ -42,7 +41,6 @@ abstract class Base
      */
     public function __construct(array $options = [])
     {
-
         $this->options = $options;
     }
 

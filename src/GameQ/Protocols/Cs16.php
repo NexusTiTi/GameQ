@@ -26,18 +26,17 @@ namespace GameQ\Protocols;
  */
 class Cs16 extends Source
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'cs16';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Counter-Strike 1.6";
 
@@ -53,7 +52,6 @@ class Cs16 extends Source
      */
     protected function processPackets($packet_id, array $packets = [])
     {
-
         // The response is gold source if the packets are split
         $this->source_engine = self::GOLDSOURCE_ENGINE;
 

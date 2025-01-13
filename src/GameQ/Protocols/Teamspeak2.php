@@ -18,11 +18,12 @@
 
 namespace GameQ\Protocols;
 
-use GameQ\Protocol;
 use GameQ\Buffer;
+use GameQ\Exception\Protocol as Exception;
+use GameQ\Helpers\Str;
+use GameQ\Protocol;
 use GameQ\Result;
 use GameQ\Server;
-use GameQ\Exception\Protocol as Exception;
 
 /**
  * Teamspeak 2 Protocol Class
@@ -36,12 +37,11 @@ use GameQ\Exception\Protocol as Exception;
  */
 class Teamspeak2 extends Protocol
 {
-
     /**
      * Array of packets we want to look up.
      * Each key should correspond to a defined method in this or a parent class
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         self::PACKET_DETAILS  => "sel %d\x0asi\x0a",
@@ -52,42 +52,42 @@ class Teamspeak2 extends Protocol
     /**
      * The transport mode for this protocol is TCP
      *
-     * @type string
+     * @var string
      */
     protected $transport = self::TRANSPORT_TCP;
 
     /**
      * The query protocol used to make the call
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'teamspeak2';
 
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'teamspeak2';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Teamspeak 2";
 
     /**
      * The client join link
      *
-     * @type string
+     * @var string
      */
     protected $join_link = "teamspeak://%s:%d/";
 
     /**
      * Normalize settings for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General
@@ -120,7 +120,6 @@ class Teamspeak2 extends Protocol
      */
     public function beforeSend(Server $server)
     {
-
         // Check to make sure we have a query_port because it is required
         if (!isset($this->options[Server::SERVER_OPTIONS_QUERY_PORT])
             || empty($this->options[Server::SERVER_OPTIONS_QUERY_PORT])
@@ -143,7 +142,6 @@ class Teamspeak2 extends Protocol
      */
     public function processResponse()
     {
-
         // Make a new buffer out of all of the packets
         $buffer = new Buffer(implode('', $this->packets_response));
 
@@ -154,7 +152,6 @@ class Teamspeak2 extends Protocol
 
         // Split this buffer as the data blocks are bound by "OK" and drop any empty values
         $sections = array_filter(explode("OK", $buffer->getBuffer()), function ($value) {
-
             $value = trim($value);
 
             return !empty($value);
@@ -189,9 +186,7 @@ class Teamspeak2 extends Protocol
         return $result->fetch();
     }
 
-    /*
-     * Internal methods
-     */
+    // Internal methods
 
 
     /**
@@ -199,10 +194,11 @@ class Teamspeak2 extends Protocol
      *
      * @param string        $data
      * @param \GameQ\Result $result
+     * @return void
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processDetails($data, Result &$result)
     {
-
         // Create a buffer
         $buffer = new Buffer($data);
 
@@ -218,7 +214,7 @@ class Teamspeak2 extends Protocol
             list($key, $value) = explode('=', $row, 2);
 
             // Add this to the result
-            $result->add($key, utf8_encode($value));
+            $result->add($key, Str::isoToUtf8($value));
         }
 
         unset($data, $buffer, $row, $key, $value);
@@ -229,10 +225,11 @@ class Teamspeak2 extends Protocol
      *
      * @param string        $data
      * @param \GameQ\Result $result
+     * @return void
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processChannels($data, Result &$result)
     {
-
         // Create a buffer
         $buffer = new Buffer($data);
 
@@ -249,7 +246,7 @@ class Teamspeak2 extends Protocol
 
             foreach ($data as $key => $value) {
                 // Now add the data to the result
-                $result->addTeam($key, utf8_encode($value));
+                $result->addTeam($key, Str::isoToUtf8($value));
             }
         }
 
@@ -261,10 +258,11 @@ class Teamspeak2 extends Protocol
      *
      * @param string        $data
      * @param \GameQ\Result $result
+     * @return void
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processPlayers($data, Result &$result)
     {
-
         // Create a buffer
         $buffer = new Buffer($data);
 
@@ -281,7 +279,7 @@ class Teamspeak2 extends Protocol
 
             foreach ($data as $key => $value) {
                 // Now add the data to the result
-                $result->addPlayer($key, utf8_encode($value));
+                $result->addPlayer($key, Str::isoToUtf8($value));
             }
         }
 

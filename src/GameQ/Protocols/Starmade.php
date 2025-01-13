@@ -18,10 +18,10 @@
 
 namespace GameQ\Protocols;
 
-use GameQ\Protocol;
 use GameQ\Buffer;
-use GameQ\Result;
 use GameQ\Exception\Protocol as Exception;
+use GameQ\Protocol;
+use GameQ\Result;
 
 /**
  * StarMade Protocol Class
@@ -34,11 +34,10 @@ use GameQ\Exception\Protocol as Exception;
  */
 class Starmade extends Protocol
 {
-
     /**
      * Array of packets we want to query.
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         self::PACKET_STATUS => "\x00\x00\x00\x09\x2a\xff\xff\x01\x6f\x00\x00\x00\x00",
@@ -47,42 +46,35 @@ class Starmade extends Protocol
     /**
      * The transport mode for this protocol is TCP
      *
-     * @type string
+     * @var string
      */
     protected $transport = self::TRANSPORT_TCP;
 
     /**
      * The query protocol used to make the call
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'starmade';
 
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'starmade';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "StarMade";
 
     /**
-     * The client join link
-     *
-     * @type string
-     */
-    protected $join_link = null;
-
-    /**
      * Normalize settings for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General
@@ -104,7 +96,6 @@ class Starmade extends Protocol
      */
     public function processResponse()
     {
-
         // Implode the packets, not sure if there is any split logic for multiple packets
         $buffer = new Buffer(implode('', $this->packets_response), Buffer::NUMBER_TYPE_BIGENDIAN);
 
@@ -154,13 +145,11 @@ class Starmade extends Protocol
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
      * @param \GameQ\Buffer $buffer
-     *
      * @return array
      * @throws \GameQ\Exception\Protocol
      */
     protected function parseServerParameters(Buffer &$buffer)
     {
-
         // Init the parsed data array
         $parsed = [];
 
@@ -178,17 +167,17 @@ class Starmade extends Protocol
                     $parsed[$i] = $buffer->readInt32Signed();
                     break;
 
-                // 64-bit int
+                    // 64-bit int
                 case 2:
                     $parsed[$i] = $buffer->readInt64();
                     break;
 
-                // Float
+                    // Float
                 case 3:
                     $parsed[$i] = $buffer->readFloat32();
                     break;
 
-                // String
+                    // String
                 case 4:
                     // The first 2 bytes are the string length
                     $strLength = $buffer->readInt16Signed();
@@ -199,22 +188,22 @@ class Starmade extends Protocol
                     unset($strLength);
                     break;
 
-                // Boolean
+                    // Boolean
                 case 5:
                     $parsed[$i] = (bool)$buffer->readInt8Signed();
                     break;
 
-                // 8-bit int
+                    // 8-bit int
                 case 6:
                     $parsed[$i] = $buffer->readInt8Signed();
                     break;
 
-                // 16-bit int
+                    // 16-bit int
                 case 7:
                     $parsed[$i] = $buffer->readInt16Signed();
                     break;
 
-                // Array
+                    // Array
                 case 8:
                     // Not implemented
                     throw new Exception("StarMade array parsing is not implemented!");

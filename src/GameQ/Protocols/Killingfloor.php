@@ -19,6 +19,7 @@
 namespace GameQ\Protocols;
 
 use GameQ\Buffer;
+use GameQ\Helpers\Str;
 use GameQ\Result;
 
 /**
@@ -29,32 +30,31 @@ use GameQ\Result;
  */
 class Killingfloor extends Unreal2
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'killing floor';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Killing Floor";
 
     /**
      * query_port = client_port + 1
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 1;
 
     /**
      * The client join link
      *
-     * @type string
+     * @var string
      */
     protected $join_link = "steam://connect/%s:%d/";
 
@@ -64,10 +64,10 @@ class Killingfloor extends Unreal2
      * @param \GameQ\Buffer $buffer
      *
      * @return array
+     * @throws \GameQ\Exception\Protocol
      */
     protected function processDetails(Buffer $buffer)
     {
-
         // Set the result to a new result instance
         $result = new Result();
 
@@ -80,10 +80,10 @@ class Killingfloor extends Unreal2
         $buffer->skip(1);
 
         // Read as a regular string since the length is incorrect (what we skipped earlier)
-        $result->add('servername', utf8_encode($buffer->readString()));
+        $result->add('servername', Str::isoToUtf8($buffer->readString()));
 
         // The rest is read as normal
-        $result->add('mapname', utf8_encode($buffer->readPascalString(1)));
+        $result->add('mapname', Str::isoToUtf8($buffer->readPascalString(1)));
         $result->add('gametype', $buffer->readPascalString(1));
         $result->add('numplayers', $buffer->readInt32());
         $result->add('maxplayers', $buffer->readInt32());

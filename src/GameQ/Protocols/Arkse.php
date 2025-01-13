@@ -26,18 +26,17 @@ namespace GameQ\Protocols;
  */
 class Arkse extends Source
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'arkse';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "ARK: Survival Evolved";
 
@@ -45,7 +44,7 @@ class Arkse extends Source
      * query_port = client_port + 19238
      * 27015 = 7777 + 19238
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 19238;
 }

@@ -26,18 +26,17 @@ namespace GameQ\Protocols;
  */
 class Atlas extends Source
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'atlas';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Atlas";
 
@@ -49,7 +48,7 @@ class Atlas extends Source
      * can be independently changed from the stock ones,
      * making the port_diff logic useless.
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 51800;
 }

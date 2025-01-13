@@ -29,7 +29,6 @@ namespace GameQ;
  */
 abstract class Protocol
 {
-
     /**
      * Constants for class states
      */
@@ -78,21 +77,21 @@ abstract class Protocol
     /**
      * Short name of the protocol
      *
-     * @type string
+     * @var string
      */
     protected $name = 'unknown';
 
     /**
      * The longer, fancier name for the protocol
      *
-     * @type string
+     * @var string
      */
     protected $name_long = 'unknown';
 
     /**
      * The difference between the client port and query port
      *
-     * @type int
+     * @var int
      */
     protected $port_diff = 0;
 
@@ -100,28 +99,28 @@ abstract class Protocol
      * The transport method to use to actually send the data
      * Default is UDP
      *
-     * @type string
+     * @var string
      */
     protected $transport = self::TRANSPORT_UDP;
 
     /**
      * The protocol type used when querying the server
      *
-     * @type string
+     * @var string
      */
     protected $protocol = 'unknown';
 
     /**
      * Holds the valid packet types this protocol has available.
      *
-     * @type array
+     * @var array
      */
     protected $packets = [];
 
     /**
      * Holds the response headers and the method to use to process them.
      *
-     * @type array
+     * @var array
      */
     protected $responses = [];
 
@@ -129,35 +128,35 @@ abstract class Protocol
      * Holds the list of methods to run when parsing the packet response(s) data. These
      * methods should provide all the return information.
      *
-     * @type array
+     * @var array
      */
     protected $process_methods = [];
 
     /**
      * The packet responses received
      *
-     * @type array
+     * @var array
      */
     protected $packets_response = [];
 
     /**
      * Holds the instance of the result class
      *
-     * @type null
+     * @var null
      */
     protected $result = null;
 
     /**
      * Options for this protocol
      *
-     * @type array
+     * @var array
      */
     protected $options = [];
 
     /**
      * Define the state of this class
      *
-     * @type int
+     * @var int
      */
     protected $state = self::STATE_STABLE;
 
@@ -166,7 +165,7 @@ abstract class Protocol
      *
      * @todo: Remove this ugly bulk by moving specific ones to their specific game(s)
      *
-     * @type array
+     * @var array
      */
     protected $normalize = [
         // General
@@ -206,16 +205,15 @@ abstract class Protocol
     /**
      * Quick join link
      *
-     * @type string
+     * @var null|string
      */
-    protected $join_link = '';
+    protected $join_link = null;
 
     /**
      * @param array $options
      */
     public function __construct(array $options = [])
     {
-
         // Set the options for this specific instance of the class
         $this->options = $options;
     }
@@ -227,7 +225,6 @@ abstract class Protocol
      */
     public function __toString()
     {
-
         return $this->name;
     }
 
@@ -238,7 +235,6 @@ abstract class Protocol
      */
     public function portDiff()
     {
-
         return $this->port_diff;
     }
 
@@ -253,18 +249,16 @@ abstract class Protocol
      */
     public function findQueryPort($clientPort)
     {
-
         return $clientPort + $this->port_diff;
     }
 
     /**
      * Return the join_link as defined by the protocol class
      *
-     * @return string
+     * @return null|string
      */
     public function joinLink()
     {
-
         return $this->join_link;
     }
 
@@ -275,7 +269,6 @@ abstract class Protocol
      */
     public function name()
     {
-
         return $this->name;
     }
 
@@ -286,7 +279,6 @@ abstract class Protocol
      */
     public function nameLong()
     {
-
         return $this->name_long;
     }
 
@@ -297,7 +289,6 @@ abstract class Protocol
      */
     public function state()
     {
-
         return $this->state;
     }
 
@@ -308,7 +299,6 @@ abstract class Protocol
      */
     public function getProtocol()
     {
-
         return $this->protocol;
     }
 
@@ -321,7 +311,6 @@ abstract class Protocol
      */
     public function transport($type = null)
     {
-
         // Act as setter
         if (!is_null($type)) {
             $this->transport = $type;
@@ -339,7 +328,6 @@ abstract class Protocol
      */
     public function options($options = [])
     {
-
         // Act as setter
         if (!empty($options)) {
             $this->options = $options;
@@ -349,9 +337,7 @@ abstract class Protocol
     }
 
 
-    /*
-     * Packet Section
-     */
+    // Packet Section
 
     /**
      * Return specific packet(s)
@@ -362,7 +348,6 @@ abstract class Protocol
      */
     public function getPacket($type = [])
     {
-
         $packets = [];
 
 
@@ -398,13 +383,12 @@ abstract class Protocol
     /**
      * Get/set the packet response
      *
-     * @param array|null $response
+     * @param array $response
      *
      * @return array
      */
-    public function packetResponse(array $response = null)
+    public function packetResponse(array $response = [])
     {
-
         // Act as setter
         if (!empty($response)) {
             $this->packets_response = $response;
@@ -414,9 +398,7 @@ abstract class Protocol
     }
 
 
-    /*
-     * Challenge section
-     */
+    // Challenge section
 
     /**
      * Determine whether or not this protocol has a challenge needed before querying
@@ -425,7 +407,6 @@ abstract class Protocol
      */
     public function hasChallenge()
     {
-
         return (isset($this->packets[self::PACKET_CHALLENGE]) && !empty($this->packets[self::PACKET_CHALLENGE]));
     }
 
@@ -442,7 +423,6 @@ abstract class Protocol
      */
     public function challengeParseAndApply(Buffer $challenge_buffer)
     {
-
         return true;
     }
 
@@ -455,7 +435,6 @@ abstract class Protocol
      */
     protected function challengeApply($challenge_string)
     {
-
         // Let's loop through all the packets and append the challenge where it is needed
         foreach ($this->packets as $packet_type => $packet) {
             $this->packets[$packet_type] = sprintf($packet, $challenge_string);
@@ -471,13 +450,10 @@ abstract class Protocol
      */
     public function getNormalize()
     {
-
         return $this->normalize;
     }
 
-    /*
-     * General
-     */
+    // General
 
     /**
      * Generic method to allow protocol classes to do work right before the query is sent

@@ -25,18 +25,17 @@ namespace GameQ\Protocols;
  */
 class Ut2004 extends Unreal2
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'ut2004';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Unreal Tournament 2004";
 }

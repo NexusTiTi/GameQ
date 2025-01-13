@@ -11,47 +11,57 @@ jobs:
     runs-on: ubuntu-22.04
     name: ApiGen
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v3
+      - name: Checkout Project
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+
+      - name: Run ApiGen
+        run: bin/apigen
+
+      - name: Upload ApiGen output artifact
+        # Require non local GitHub Actions Runner & the projects default branch
+        if: env.ACT != 'true' && ${{ format('refs/heads/{0}', github.event.repository.default_branch) == github.ref }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: apigen
+          path: build/apigen
+
+  pages:
+    runs-on: ubuntu-22.04
+    name: GitHub Pages
+    needs: apigen
+    # Require non local GitHub Actions Runner & the projects default branch
+    if: env.ACT != 'true' && ${{ format('refs/heads/{0}', github.event.repository.default_branch) == github.ref }}
+    steps:
+      - name: Download current README
+        uses: actions/checkout@v4
         with:
           fetch-depth: 10
           path: source
-          
-      - name: Checkout gh-pages
-        uses: actions/checkout@v3
+
+      - name: Checkout GitHub Pages
+        uses: actions/checkout@v4
         with:
           fetch-depth: 10
           ref: gh-pages
           path: gh-pages
-          
-      - name: Validate composer.json
-        run: |
-             cd source
-             composer validate
-        
-      - name: Cache composer files
-        uses: actions/cache@v3
-        with:
-          path: ~/.composer/cache/files
-          key: dependencies-php-${{ matrix.php }}-composer-${{ hashFiles('source/composer.json') }}
 
-      - name: Install dependencies using composer
-        run: |
-             cd source
-             composer install --prefer-dist --no-interaction ${{ matrix.composer-extra }}
-       
-      - name: Clean old ApiGen
-        run: |
-             rm -rf gh-pages/api
-             mkdir -p gh-pages/api
-          
-      - name: ApiGen
-        run: docker run --rm --interactive --user $(id -u):$(id -g) --volume "$PWD:$PWD" --workdir "$PWD/source" apigen/apigen:edge src --output ../gh-pages/api
-        
-      - name: Commit & Push updated file
-        if: always()
+      - name: Remove old ApiGen
+        run: rm -r gh-pages/api
+
+      - name: Download current ApiGen
+        uses: actions/download-artifact@v4
+        with:
+          name: apigen
+          path: gh-pages/api
+
+      - name: Update GitHub Pages index from README
+        run: cp source/README.md gh-pages/index.md
+
+      - name: Commit & Push GitHub Pages
         uses: EndBug/add-and-commit@v9
         with:
           default_author: github_actor
-          message: 'Regenerated ApiGen documentation.'
+          message: 'Updated GitHub Pages.'
           cwd: gh-pages

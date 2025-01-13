@@ -20,18 +20,17 @@ namespace GameQ\Tests\Protocols;
 
 class Quake2 extends Base
 {
-
     /**
      * Holds stub on setup
      *
-     * @type \GameQ\Protocols\Quake2
+     * @var \GameQ\Protocols\Quake2
      */
     protected $stub;
 
     /**
      * Holds the expected packets for this protocol class
      *
-     * @type array
+     * @var array
      */
     protected $packets = [
         \GameQ\Protocol::PACKET_STATUS => "\xFF\xFF\xFF\xFFstatus\x00",
@@ -44,7 +43,6 @@ class Quake2 extends Base
      */
     public function customSetUp()
     {
-
         // Create the stub class
         $this->stub = new \GameQ\Protocols\Quake2();
     }
@@ -54,7 +52,6 @@ class Quake2 extends Base
      */
     public function testPackets()
     {
-
         // Test to make sure packets are defined properly
         $this->assertEquals($this->packets, $this->stub->getPacket());
     }
@@ -64,7 +61,6 @@ class Quake2 extends Base
      */
     public function testInvalidPacketType()
     {
-
         // Read in a quake 2 source file
         $source = file_get_contents(sprintf('%s/Providers/Quake2/1_response.txt', __DIR__));
 

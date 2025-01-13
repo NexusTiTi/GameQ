@@ -28,18 +28,17 @@ namespace GameQ\Protocols;
  */
 class Cscz extends Cs16
 {
-
     /**
      * String name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name = 'cscz';
 
     /**
      * Longer string name of this protocol class
      *
-     * @type string
+     * @var string
      */
     protected $name_long = "Counter-Strike: Condition Zero";
 }

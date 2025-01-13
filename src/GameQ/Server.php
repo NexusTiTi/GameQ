@@ -27,9 +27,7 @@ use GameQ\Exception\Server as Exception;
  */
 class Server
 {
-    /*
-     * Server array keys
-     */
+    // Server array keys
     const SERVER_TYPE = 'type';
 
     const SERVER_HOST = 'host';
@@ -38,61 +36,57 @@ class Server
 
     const SERVER_OPTIONS = 'options';
 
-    /*
-     * Server options keys
-     */
+    // Server options keys
 
-    /*
-     * Use this option when the query_port and client connect ports are different
-     */
+    // Use this option when the query_port and client connect ports are different
     const SERVER_OPTIONS_QUERY_PORT = 'query_port';
 
     /**
      * The protocol class for this server
      *
-     * @type \GameQ\Protocol
+     * @var \GameQ\Protocol
      */
     protected $protocol = null;
 
     /**
      * Id of this server
      *
-     * @type string
+     * @var string
      */
     public $id = null;
 
     /**
      * IP Address of this server
      *
-     * @type string
+     * @var string
      */
     public $ip = null;
 
     /**
      * The server's client port (connect port)
      *
-     * @type int
+     * @var int
      */
     public $port_client = null;
 
     /**
      * The server's query port
      *
-     * @type int
+     * @var int
      */
     public $port_query = null;
 
     /**
      * Holds other server specific options
      *
-     * @type array
+     * @var array
      */
     protected $options = [];
 
     /**
      * Holds the sockets already open for this server
      *
-     * @type array
+     * @var array
      */
     protected $sockets = [];
 
@@ -105,7 +99,6 @@ class Server
      */
     public function __construct(array $server_info = [])
     {
-
         // Check for server type
         if (!array_key_exists(self::SERVER_TYPE, $server_info) || empty($server_info[self::SERVER_TYPE])) {
             throw new Exception("Missing server info key '" . self::SERVER_TYPE . "'!");
@@ -160,7 +153,6 @@ class Server
      */
     protected function checkAndSetIpPort($ip_address)
     {
-
         // Test for IPv6
         if (substr_count($ip_address, ':') > 1) {
             // See if we have a port, input should be in the format [::1]:27015 or similar
@@ -223,7 +215,6 @@ class Server
      */
     protected function checkAndSetServerOptions()
     {
-
         // Specific query port defined
         if (array_key_exists(self::SERVER_OPTIONS_QUERY_PORT, $this->options)) {
             $this->port_query = (int)$this->options[self::SERVER_OPTIONS_QUERY_PORT];
@@ -243,7 +234,6 @@ class Server
      */
     public function setOption($key, $value)
     {
-
         $this->options[$key] = $value;
 
         return $this; // Make chainable
@@ -258,7 +248,6 @@ class Server
      */
     public function getOption($key)
     {
-
         return (array_key_exists($key, $this->options)) ? $this->options[$key] : null;
     }
 
@@ -274,7 +263,6 @@ class Server
      */
     public function id()
     {
-
         return $this->id;
     }
 
@@ -285,7 +273,6 @@ class Server
      */
     public function ip()
     {
-
         return $this->ip;
     }
 
@@ -296,7 +283,6 @@ class Server
      */
     public function portClient()
     {
-
         return $this->port_client;
     }
 
@@ -307,7 +293,6 @@ class Server
      */
     public function portQuery()
     {
-
         return $this->port_query;
     }
 
@@ -318,26 +303,29 @@ class Server
      */
     public function protocol()
     {
-
         return $this->protocol;
     }
 
     /**
      * Get the join link for this server
      *
-     * @return string
+     * @return null|string
      */
     public function getJoinLink()
     {
-        if ($this->protocol->joinLink() !== null) {
-            return sprintf($this->protocol->joinLink(), $this->ip, $this->portClient());
+        // Read the joinLink template defined by the Protocol
+        $joinLink = $this->protocol->joinLink();
+
+        // Ensure the Protocol provides a joinLink template
+        if (is_null($joinLink)) {
+            return null;
         }
-        return '';
+        
+        // Fill the template to build the final joinLink
+        return sprintf($joinLink, $this->ip, $this->portClient());
     }
 
-    /*
-     * Socket holding
-     */
+    // Socket holding
 
     /**
      * Add a socket for this server to be reused
@@ -348,7 +336,6 @@ class Server
      */
     public function socketAdd(Query\Core $socket)
     {
-
         $this->sockets[] = $socket;
     }
 
@@ -361,7 +348,6 @@ class Server
      */
     public function socketGet()
     {
-
         $socket = null;
 
         if (count($this->sockets) > 0) {
@@ -378,10 +364,9 @@ class Server
      */
     public function socketCleanse()
     {
-
         // Close all of the sockets available
         foreach ($this->sockets as $socket) {
-            /* @var $socket \GameQ\Query\Core */
+            // @var $socket \GameQ\Query\Core
             $socket->close();
         }
 
