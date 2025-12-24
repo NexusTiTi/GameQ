@@ -90,6 +90,19 @@ class Palworldrest extends Http
     protected $server_data = null;
 
     /**
+     * Normalize settings for this protocol
+     *
+     * @var array
+     */
+    protected $normalize = [
+        'player'  => [
+            'name'   => 'name',
+            'id'     => 'userId',
+            'score'  => 'score',
+        ],
+    ];
+
+    /**
      * Process the response from the REST API and filter Palworld-specific server data
      *
      * @return array
